@@ -76,7 +76,7 @@ object RandomEmojiSc : Screen {
         var loaidng by remember { mutableStateOf(false) }
         var nav = LocalNavigator.currentOrThrow
         LaunchedEffect(Unit) {
-            emoji=getRandomEmoji()
+            emoji = getRandomEmoji()
         }
         Box(
             Modifier
@@ -200,7 +200,12 @@ object AllEmojis : Screen {
                             emojis.filter { (it?.name?.contains(text) ?: "") as Boolean }
                     },
                     maxLines = 1,
-                    textStyle = TextStyle(fontSize = 18.sp, color = Color.White, textDirection = TextDirection.Rtl, fontFamily = Byekan),
+                    textStyle = TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.White,
+                        textDirection = TextDirection.Rtl,
+                        fontFamily = Byekan
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
@@ -208,7 +213,7 @@ object AllEmojis : Screen {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             style = TextStyle(textDirection = TextDirection.Rtl),
-                            fontFamily =Byekan,
+                            fontFamily = Byekan,
                             text = "جستجو اموجی",
                             color = Color.White.copy(alpha = 0.5f)
                         )
@@ -253,7 +258,12 @@ object AllEmojis : Screen {
                     colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0x80FFEB3B)),
                     shape = RoundedCornerShape(12.dp),
                     value = group,
-                    textStyle = TextStyle(textDirection = TextDirection.Rtl,fontFamily = Byekan, color = Color.White, fontSize = 18.sp),
+                    textStyle = TextStyle(
+                        textDirection = TextDirection.Rtl,
+                        fontFamily = Byekan,
+                        color = Color.White,
+                        fontSize = 18.sp
+                    ),
                     onValueChange = {
                         group = it
 
@@ -264,7 +274,16 @@ object AllEmojis : Screen {
                         .weight(0.5f)
 
                         .padding(12.dp),
-                    placeholder = { Text(color = Color.White.copy(alpha = 0.5f),modifier = Modifier.fillMaxWidth(), text = "نام گروه", fontSize = 16.sp, fontFamily = Byekan, style = TextStyle(textDirection = TextDirection.Rtl)) },
+                    placeholder = {
+                        Text(
+                            color = Color.White.copy(alpha = 0.5f),
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "نام گروه",
+                            fontSize = 16.sp,
+                            fontFamily = Byekan,
+                            style = TextStyle(textDirection = TextDirection.Rtl)
+                        )
+                    },
                     leadingIcon = {
                         IconButton({
                             filteredEmojis =
@@ -285,7 +304,12 @@ object AllEmojis : Screen {
                     CircularProgressIndicator()
                 }
             } else {
-                LazyVerticalGrid(modifier = Modifier.fillMaxHeight().padding(bottom = 50.dp, top = 10.dp), columns = GridCells.Fixed(count = 4)) {
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(bottom = 50.dp, top = 10.dp),
+                    columns = GridCells.Fixed(count = 4)
+                ) {
                     items(items = filteredEmojis) {
                         EmojiCardItem(it)
                     }
