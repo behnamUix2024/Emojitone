@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -51,6 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -62,17 +64,13 @@ import com.behnamuix.emojitone.model.Emoji
 import com.behnamuix.emojitone.model.convertUnicodeToEmoji
 import com.behnamuix.emojitone.network.getAllEmojis
 import com.behnamuix.emojitone.network.getRandomEmoji
+import com.behnamuix.emojitone.ui.theme.Byekan
 
 import kotlinx.coroutines.launch
 
 object RandomEmojiSc : Screen {
     @Composable
     override fun Content() {
-        var listColor = listOf<Color>(
-            Color(0xff3A1C71),
-            Color(0xffD76D77),
-            Color(0xffFFAF7B)
-        )
         var emoji by remember { mutableStateOf<Emoji?>(null) }
         var scope = rememberCoroutineScope()
         var loaidng by remember { mutableStateOf(false) }
@@ -82,12 +80,7 @@ object RandomEmojiSc : Screen {
         }
         Box(
             Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        listColor.shuffled()
-                    )
-                ),
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Box(
@@ -169,11 +162,6 @@ object RandomEmojiSc : Screen {
 object AllEmojis : Screen {
     @Composable
     override fun Content() {
-        var listColor = listOf<Color>(
-            Color(0xff3A1C71),
-            Color(0xffD76D77),
-            Color(0xffFFAF7B)
-        )
         var nav = LocalNavigator.currentOrThrow
         var emojis by remember { mutableStateOf<List<Emoji?>>(emptyList()) }
         var filteredEmojis by remember { mutableStateOf<List<Emoji?>>(emptyList()) }
@@ -189,11 +177,7 @@ object AllEmojis : Screen {
         Column(
             modifier = Modifier
                 .padding(top = 30.dp)
-                .background(
-                    brush = Brush.linearGradient(
-                        listColor.shuffled()
-                    )
-                )
+
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -216,12 +200,16 @@ object AllEmojis : Screen {
                             emojis.filter { (it?.name?.contains(text) ?: "") as Boolean }
                     },
                     maxLines = 1,
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.White, textDirection = TextDirection.Rtl, fontFamily = Byekan),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
                     placeholder = {
                         Text(
-                            text = "Search emoji",
+                            modifier = Modifier.fillMaxWidth(),
+                            style = TextStyle(textDirection = TextDirection.Rtl),
+                            fontFamily =Byekan,
+                            text = "جستجو اموجی",
                             color = Color.White.copy(alpha = 0.5f)
                         )
                     },
@@ -265,16 +253,18 @@ object AllEmojis : Screen {
                     colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0x80FFEB3B)),
                     shape = RoundedCornerShape(12.dp),
                     value = group,
-                    textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
+                    textStyle = TextStyle(textDirection = TextDirection.Rtl,fontFamily = Byekan, color = Color.White, fontSize = 18.sp),
                     onValueChange = {
                         group = it
 
                     },
                     maxLines = 1,
+
                     modifier = Modifier
                         .weight(0.5f)
+
                         .padding(12.dp),
-                    placeholder = { Text(text = "Group name", fontSize = 16.sp) },
+                    placeholder = { Text(color = Color.White.copy(alpha = 0.5f),modifier = Modifier.fillMaxWidth(), text = "نام گروه", fontSize = 16.sp, fontFamily = Byekan, style = TextStyle(textDirection = TextDirection.Rtl)) },
                     leadingIcon = {
                         IconButton({
                             filteredEmojis =
@@ -295,7 +285,7 @@ object AllEmojis : Screen {
                     CircularProgressIndicator()
                 }
             } else {
-                LazyVerticalGrid(columns = GridCells.Fixed(count = 4)) {
+                LazyVerticalGrid(modifier = Modifier.fillMaxHeight().padding(bottom = 50.dp, top = 10.dp), columns = GridCells.Fixed(count = 4)) {
                     items(items = filteredEmojis) {
                         EmojiCardItem(it)
                     }
