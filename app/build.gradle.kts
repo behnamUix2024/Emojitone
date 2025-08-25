@@ -62,10 +62,12 @@ dependencies {
     // Navigator
     implementation("cafe.adriel.voyager:voyager-navigator:1.1.0-beta02")
 
-    //KTOR
 
     //COIL
     implementation("io.coil-kt:coil-compose:2.0.0-rc01")
+
+
+    //KTOR
     implementation("io.ktor:ktor-client-core:2.3.4") // Replace with latest version
     // Ktor Client Android engine (OkHttp alternative, but Android-specific)
     implementation("io.ktor:ktor-client-okhttp:2.3.4")
@@ -74,6 +76,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
     //////////////////////////
+
+
+    implementation("com.google.mlkit:translate:17.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
 
 }

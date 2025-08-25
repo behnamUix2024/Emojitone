@@ -1,6 +1,7 @@
 package com.behnamuix.emojitone
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +18,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.behnamuix.emojitone.ui.theme.EmojitoneTheme
 import com.behnamuix.emojitone.View.nav.AllEmojis
 
+@Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
             Color(0xffFFAF7B)
         )
         setupSystemBars()
+        Toast.makeText(this, "Design:BehnamUix\nDevelope:BehnamUix", Toast.LENGTH_SHORT).show()
 
         setContent {
             EmojitoneTheme {

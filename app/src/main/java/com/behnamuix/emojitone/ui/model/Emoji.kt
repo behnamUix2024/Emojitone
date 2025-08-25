@@ -1,5 +1,7 @@
 package com.behnamuix.emojitone.model
 
+import android.content.Context
+import android.content.Intent
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,4 +21,12 @@ fun convertUnicodeToEmoji(unicode: String): String{
        return ""
    }
     
+}
+fun shareToSocial(emoji: Emoji?, ctx: Context) {
+    var intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, convertUnicodeToEmoji(emoji?.unicode?.get(0) ?: "NULL"))
+        type = "text/plain"
+    }
+    ctx.startActivity(intent)
 }

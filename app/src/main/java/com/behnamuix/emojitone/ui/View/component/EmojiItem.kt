@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.behnamuix.emojitone.View.nav.shareToSocial
+import com.behnamuix.emojitone.model.shareToSocial
 import com.behnamuix.emojitone.model.Emoji
 import com.behnamuix.emojitone.model.convertUnicodeToEmoji
 
@@ -42,8 +42,6 @@ fun EmojiCardItem(emoji: Emoji?) {
     OutlinedCard(
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEB3B).copy(alpha = 0.1f)),
         modifier = Modifier
-
-
 
 
             .padding(8.dp)
@@ -86,7 +84,7 @@ fun EmojiCardItem(emoji: Emoji?) {
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         text = emoji?.name ?: "",
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         maxLines = 1,
                         modifier = Modifier.fillMaxWidth(0.9f)
                     )

@@ -2,6 +2,7 @@ package com.behnamuix.emojitone.View.nav
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,11 +25,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -46,8 +49,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -65,6 +70,8 @@ import com.behnamuix.emojitone.model.convertUnicodeToEmoji
 import com.behnamuix.emojitone.network.getAllEmojis
 import com.behnamuix.emojitone.network.getRandomEmoji
 import com.behnamuix.emojitone.ui.theme.Byekan
+import com.behnamuix.emojitone.ui.translator.translateToEnglish
+import kotlinx.coroutines.delay
 
 import kotlinx.coroutines.launch
 
@@ -78,6 +85,7 @@ object RandomEmojiSc : Screen {
         LaunchedEffect(Unit) {
             emoji = getRandomEmoji()
         }
+
         Box(
             Modifier
                 .fillMaxSize(),
@@ -92,7 +100,7 @@ object RandomEmojiSc : Screen {
                 IconButton({ nav.pop() }) {
                     Icon(
                         modifier = Modifier.size(36.dp),
-                        imageVector = Icons.Default.KeyboardArrowLeft,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = "",
                         tint = Color(0xFFFFFFFF)
                     )
@@ -167,6 +175,7 @@ object AllEmojis : Screen {
         var filteredEmojis by remember { mutableStateOf<List<Emoji?>>(emptyList()) }
         var loading by remember { mutableStateOf(true) }
         var text by remember { mutableStateOf("") }
+        var textPer by remember { mutableStateOf("") }
         var group by remember { mutableStateOf("") }
         LaunchedEffect(Unit) {
             loading = true
@@ -174,11 +183,54 @@ object AllEmojis : Screen {
             filteredEmojis = emojis
             loading = false
         }
+        LaunchedEffect(textPer) {
+            filteredEmojis = if (textPer.isNotBlank()) {
+                emojis.filter { it?.name?.contains(textPer, ignoreCase = true) == true }
+            } else {
+                emojis
+            }
+        }
+        LaunchedEffect(text) {
+            delay(300) // صبر کن تا کاربر تایپ کند
+            if (text.isNotBlank()) {
+                textPer = translateToEnglish(text)
+
+            } else {
+                text = ""
+            }
+        }
         Column(
             modifier = Modifier
-                .padding(top = 30.dp)
+                .padding(top = 40.dp)
 
         ) {
+           Column(
+               Modifier.fillMaxWidth(),
+               horizontalAlignment = Alignment.CenterHorizontally) {
+               Card(
+
+                   shape = RoundedCornerShape(8.dp),
+                   colors = CardDefaults.cardColors(
+                       containerColor = Color.Black.copy(
+                           alpha = 0.2f
+                       )
+                   )
+               ) {
+                   Text(
+                       fontFamily = Byekan,
+                       maxLines = 1,
+                       fontSize = 14.sp,
+                       text = textPer + " :ترجمه به انگلیسی",
+                       textAlign = TextAlign.Center,
+                       color = Color.White,
+                       modifier = Modifier
+                           .fillMaxWidth(0.5f)
+                           .padding(4.dp)
+                           .clip(shape = RoundedCornerShape(12.dp))
+                           .clickable(onClick = { text = textPer })
+                   )
+               }
+           }
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -194,11 +246,12 @@ object AllEmojis : Screen {
                     colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0x80FFEB3B)),
                     shape = RoundedCornerShape(12.dp),
                     value = text,
+
                     onValueChange = {
                         text = it
-                        filteredEmojis =
-                            emojis.filter { (it?.name?.contains(text) ?: "") as Boolean }
+
                     },
+
                     maxLines = 1,
                     textStyle = TextStyle(
                         fontSize = 18.sp,
@@ -320,14 +373,7 @@ object AllEmojis : Screen {
 
 }
 
-fun shareToSocial(emoji: Emoji?, ctx: Context) {
-    var intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, convertUnicodeToEmoji(emoji?.unicode?.get(0) ?: "NULL"))
-        type = "text/plain"
-    }
-    ctx.startActivity(intent)
-}
+
 
 
 
